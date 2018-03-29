@@ -1,0 +1,72 @@
+3/29/18
+
+week 3--use map() to turn off parameters, mirror parameters (i.e., use the same value) see demo in tmb examples folder
+
+from last--mle consistency with true model (for simulation and bug checking)
+asymptotic normality around optimal value
+bonus-transformation invariant (get same predicted values using different parameterizations)
+
+today--glm, next week glmms
+many st models start with log-gaussian cox process models (log link for poisson counts)
+lambda intensity parameter (expected value)
+
+link is transformation on LHS--inverse link is transformation on RHS (with linear predictor on right hand side)
+derive poisson from binomial, the rare event version (i.e., p is very small)
+
+normal comes up all the time because of the CLT (sums of independent RVs with same distribution....? YES)
+e.g., height is normally distributed because there are like 10,000 draws from different genes and effects, and added all up -> normal
+
+nonlinear maximization
+Rosenbrook banana function
+smartest path down the gradient, but then you get stuck in a valley, which means you'd have to take a sharp left to get to min val
+good test of optimizers
+Quasi-newton example: gets stuck at valley, not taking any more steps becasue the gradient is very small--doesn't know which way to go (uses gradients)
+Nelder-Mead: ameoba in 2d and makes a triangle to pick one vertex to follow (doesn't use gradients)
+tmb uses Nelder Mead with gradient info, we'll use for the rest of class
+
+Lab/homework example
+want to figure out average catch rate for canary rockfish in our survey
+Issues with data set--fit using glm instead
+
+R Code part/example
+anytime you have biomass there are issues with zeros and non-integer measurements. what to do?
+remember that we can always factor joint distributions--here, catch >0 and postive catch to get a delta model
+we can define a glmm for each component
+simple delta model of today [???? did I use 1-p for my smooshing models?]
+minimum number of params in simple model: three, theta_1, theta_2 (variance of lognormal), and at least one beta param
+use log likelihood (and log probability) as the distibution for the data
+
+On tues, R run was worse because-it had a lower optimization cuttoff (3rd decimal place, vs tmb optimized more fully) and a bit slower. R implementation was vectorized, so slower bc not compiled, but tmb is overloaded to do automatic differentiation. 
+tmp uses template, C++ thing that lets you overload the meaning of types/functions
+type = Type, an object that tracks the value and derivatives automatically
+all function algebra (division, exp, etc.) are overloaded to work on value and derivative, so code looks normal, but is actually simultatneously tracking the value and derivatives (1st, 2nd, etc) automatically. so we get that all automatically as long as we define all the values to be type Type
+series of templated packages in C++ that you can use in tmb, but not all C++ packages are templated, and those won't work with tmb
+
+ideas to modify--add more covariates, switch lognormal to normal or gamma
+
+Homework
+How to assess fit?
+Model selection with AIC etc
+posterior predictive loss (??)
+simulation replicates are independent, use binomial to model confidence interval coverage
+three pages double spaced, as short as you want
+3x3 factorial experiment
+model of your choice= + covariate, tweedie, etc.
+
+Watch out for data format--comes in as a list already!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
