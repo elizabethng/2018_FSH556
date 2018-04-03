@@ -17,7 +17,7 @@ Type objective_function<Type>::operator() ()
   DATA_MATRIX( X_ij );
 
   // Parameters
-  PARAMETER_VECTOR( b_j );
+  PARAMETER_VECTOR( b_j );    // vector, but with just one elment?
   PARAMETER_VECTOR( theta_z );
 
   // Objective funcction
@@ -31,7 +31,7 @@ Type objective_function<Type>::operator() ()
   linpred_i = X_ij * b_j;
 
   // Probability of data conditional on fixed effect values
-  for( int i=0; i<n_data; i++){
+  for( int i=0; i<n_data; i++){ // note less than because of C++ indexing
     if(y_i(i)==0) jnll -= log( zero_prob );
     if(y_i(i)!=0) jnll -= log( 1-zero_prob ) + dlognorm( y_i(i), linpred_i(i), logsd, true );
   }
