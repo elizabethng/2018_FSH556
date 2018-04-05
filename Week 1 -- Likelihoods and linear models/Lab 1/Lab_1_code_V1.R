@@ -147,12 +147,12 @@ dyn.load( dynlib("delta_model_v2") )
 # Step 1 -- divide into partitions
 K = 10
 Partition_i = sample( x=1:K, size=length(CPUE), replace=TRUE )
-PredNLL_k = rep(NA, K)
+PredNLL_k = rep(NA, K) # log-predicted prob?
 
 # Step 2 --Loop through partitions
 for(k in 1:K){
-  Params = list("b_j"=rep(0,ncol(X)), "theta_z"=c(0,0))
-  Data = list( "y_i"=CPUE, "X_ij"=X, predTF_i=ifelse(Partition_i==k,1,0) )
+  Params = list("b_j"=rep(0,ncol(X)), "theta_z"=c(0,0))                     # Same as before
+  Data = list( "y_i"=CPUE, "X_ij"=X, predTF_i=ifelse(Partition_i==k,1,0) )  # creates an indicator variable, 1 for 1/10th of data
   Obj = MakeADFun( data=Data, parameters=Params, DLL="delta_model_v2")
 
   # Optimize
