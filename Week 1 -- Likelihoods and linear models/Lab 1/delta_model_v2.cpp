@@ -16,7 +16,7 @@ Type objective_function<Type>::operator() ()
   // Data
   DATA_VECTOR( y_i );
   DATA_MATRIX( X_ij )
-  DATA_VECTOR( predTF_i );
+  DATA_VECTOR( predTF_i ); // new data input vector, indicator variable for prediction
 
   // Parameters
   PARAMETER_VECTOR( b_j );
@@ -26,13 +26,17 @@ Type objective_function<Type>::operator() ()
   Type zero_prob = 1 / (1 + exp(-theta_z(0)));
   Type logsd = exp(theta_z(1));
   int n_data = y_i.size();
-  int n_j = X_ij.row(0).size();
+  int n_j = X_ij.row(0).size(); // size of the first row of X_ij? ie ncol(X_ij)??
+  
+  // REPORT(n_j);
 
   vector<Type> jnll_i(n_data);
   Type jnll = 0;
   Type pred_jnll = 0;
 
-  // Linear predictor
+  // Linear predictor  
+  // use the indicator function--only the current fold contributes to the likelihood??
+  // no because that's stored in predTF_i, which isn't used here
   vector<Type> linpred_i( n_data );
   for( int i=0; i<n_data; i++){
     linpred_i(i) = 0;
@@ -46,6 +50,7 @@ Type objective_function<Type>::operator() ()
     if(y_i(i)==0) jnll_i(i) -= log( zero_prob );
     if(y_i(i)!=0) jnll_i(i) -= log( 1-zero_prob ) + dlognorm( y_i(i), linpred_i(i), logsd, true );
     // Running counter
+    // HERE is where our indicator comes into play...
     if( predTF_i(i)==0 ) jnll += jnll_i(i);
     if( predTF_i(i)==1 ) pred_jnll += jnll_i(i);
   }
