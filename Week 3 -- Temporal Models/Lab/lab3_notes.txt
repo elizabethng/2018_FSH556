@@ -1,0 +1,47 @@
+Lab exercise
+how to modify gompertz model to make it more relevant to models later in the class
+real world data set = FishData package
+often also eastern bering sea
+
+Example--fit a population model to alaskan pollock
+run as before, we get an improbably high precision
+add in sampling variance and use data to figure out what our precision is
+
+log(bt) ~ Normal(log(dt), SE(log(bt))^2 + sigma_b^2)
+SE(log(bt))^2 := sampling variance
+sigma_b^2     := process variance
+why using the variances vs sds?
+independent variances are additive (makes sense that sampling variance and biological variance are independent)
+
+SE(log(bt))^2 --> can estimate from data...obtain SE of index of abundance from the variance of each obs from the mean in each year
+[ ] code this up
+fancy--convert to variance of a lognormal distribution (since we're looking at the log of the index, not the index itself)
+using bias correction??
+take R and .cpp file and calc that sampling variance for each year and give that to .cpp to use a lower bound on the variance
+
+in R make a new vector of the SEs of the measurement process
+put into data step to feed to C++
+
+in cpp need to add a data vector, and add it into the likelihood of the obs process
+
+Fit is better, but we still have the issue of having a parameter at the bound
+no additional variance due to variation in data from sampling...log_sigmaM --> 0
+instead of changing the model further, we decide to make it 0
+same as fixing it as -Inf
+
+Map = list()
+Map[["log_sigmaM"]] = factor(NA)
+
+And then change the start value to -Inf (or close to there)
+Parameters[["log_sigmaM"]] = log(1e-10)
+
+Estimates will be similar since value was going there anyways
+SEs will look better
+AIC will be improved because we're removing a param
+
+#### HW 3
+100 simulated data sets, each fit by 4 models (1x4 instead of 4x4)
+
+
+
+

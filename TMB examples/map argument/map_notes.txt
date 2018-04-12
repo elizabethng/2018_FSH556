@@ -1,0 +1,57 @@
+
+Hint for HW use map input to tmb
+2 basic roles--turning off a parameter (today) and mirroring (making params have the same value)
+let's you use the same tmb file to do lots of things (params are fixed at starting values or fixed to be the same as other values)
+
+look at c++ side
+read block of working code (prob data and prob random effects)
+site specific deviations have a normal dist with mean 0
+fit lmm and compare to one without random effects structure (no site variation)
+one way--just make a new c++ file and remove all the spz references
+one way--dont change the model at all, fix log(sd0) at a very small value and the model would run, but leaves a lot of useless integrals
+friendlier way--every element of z = 0, and turn off log sdz and don't interpret value
+
+add a new argument to the makedyn argument, map = Map
+where Map is a tagged list, a factor with NAs or integer values
+setting the value to NA is turning off the parameter
+running Obj$par will also show that the values aren't in there
+to set all the Zs equal, use a factor of 1
+turning off the values == leave at starting values
+
+Report = Obj$report()
+names(Report)
+Obj$Par (with no random effects) keeps track of input parameters
+
+BUT
+Report
+--> will still have 10 values of Z and SDZ, even though we turned them off
+tmb still tracks these params internally, and are still calculated internally
+
+as long as you write your cpp file as a bunch of nested models, then you can use a single cpp file with map magic to minize the amount of code
+
+
+get the final best parameter values???
+used by andre for new starting values
+Obj$env$last.par.best
+
+Obj$env$parList( Opt$par )
+
+tmb -- two ways to think about parameters
+random vs fixed, and fixed are given in the parameters vector
+but if you use map, it's transformig the given param vector into the vector that is actually optimized
+
+
+Recall inner optimizer vs outer optimizer
+inner optimizer--optimize wrt random effects + gradients (only for random stuff)
+laplace approximation to marginalize and maximize wrt fixed effects ?
+then outer optimizer does the random effects??
+
+
+
+
+
+
+
+
+
+
