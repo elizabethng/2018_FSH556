@@ -1,6 +1,7 @@
+# EN VERSION
 
-
-setwd( "C:/Users/James.Thorson/Desktop/Project_git/2016_classes_private/Spatio-temporal models/Week 7 -- spatiotemporal models/Lab" )
+# setwd( "C:/Users/James.Thorson/Desktop/Project_git/2016_classes_private/Spatio-temporal models/Week 7 -- spatiotemporal models/Lab" )
+setwd("~/GitHub/2018_FSH556/Week 7 -- spatiotemporal models/Lab")
 
 #########################
 # Spatial Gompertz model
