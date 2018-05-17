@@ -1,0 +1,27 @@
+tmb optimizer controls can go to tmb for inner optimizer, or can pass via control() things to nelder-mead, optim etc. that go to the outer optimizer. 
+nlminb is just doing the outer optimizer. in general, itermax and evalmax are set to 200 by default, and for really big models that might not be enough. TMBHelper automatically increases that for the outer optimizer. 
+abstol is what it does as objective function gets to zero (if the OF has a real meaning. but for out likelihoods they don't mean anything. could mean something in eg. physics)
+reltol default is 10^-10, which is noisy function at machine tolerance level. fine for us
+
+optimx is a package that builds together a bunch on nonlinear optimizers. see early lecture with video of these working. nelder mead with gradients is a pretty robust approach. but it does assume that the dimensions are all on the same scale (that's why we take lots of logs). Newton step at end is scale free, since it uses the curvature. That's why using a few of those can really help get you close to the minima (b/c scale free, and by that point you should be pretty close to quadratic, where that works well). 
+
+inner optimizer defaults? in the function, Jim overloads some things to deal with some inner optimizer issues...
+
+outer optimizer--normalize the GMRF with determinant of something...that would never change during inner optimizer because there's only fixed effects that calculate that. Tmb$Options['normalize_GRMF_inCPP'] but might not actually speed things up at this point. 
+
+verbose output
+outer mcg is outer gradient maximum (for laplace appx wrt fixed effects) want it to be small
+inner u step: close to one means close to quadratic so inner newton optimizer is working well
+inner mgc stops when it reaches the tolerance (eg less than one trillionth)
+value is occurring in inner optimizer, doesn't know the likelihood...its the joint likelihood (jnll). marginal likelihood is not being listed in the outer part (it has finished the nlimb step and is only doing the inner newton steps). 
+
+can implement a spline with a Q matrix. that's why it's similar to a GRMF becasue they both use that Q, though it's explicit in a GRMF but not in GAM
+
+define a model recursively (across space or time) OR you can look at the joint prob of the model. if recursive, you need to initialize (at t0 etc) and if a fixed effect represents that, then it doesn't make sense to define a random effect for that time, becuase the fixed effect will soak up all the variance for the random effect.  that is hard to do in the joint parameterization though, becasue it implicitly includes that first year. 
+
+
+
+
+
+
+
