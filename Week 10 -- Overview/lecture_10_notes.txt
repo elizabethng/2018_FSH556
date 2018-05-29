@@ -1,0 +1,86 @@
+Class overview
+
+Week 1: Nelder mead with gradient, second is nelder mead without it
+-same speed per function eval, but RHS is more jerky
+-but hard to find way along ridge
+-How does Nelder mead work? 2d three point triangle expansion and then flips over there and doubles the distance if it's improving
+-Poisson data fit by gamma--means are off?
+
+Week 2: GLMM
+-Laplace approximation, works well for more normal (more df) distribution
+-How did we generate Laplace appx?
+-estimates the mode and then a normal around that
+-lines up mode and mean and then makes height equal (does a function evaluation), and then does a second derivative evaluation to match the curvature. 
+-So it's very good locally, but not very good in the tails, especially for non-normal distribution
+-Seperability--break integral into components
+-Also means inverse hessian has lots of zeros--can eval the laplace approximation without doing a huge computation for second derivatives
+
+Week 3: Time series
+-Gompertz? since it looks like there's an equilibrium tendency (AR1 process in log-space) 
+-moments of Gompertz: carrying capacity (a/b), beta is how correlated things are
+-how would we evaluate coverage of "true"? 
+-some smoothing happens relative to data
+-GAMs--harder to find the correlation function and to reinterpret as a biological function
+
+Week 4: Multiple populations + time-series
+-2 ways to think about covariance matrix
+-cholesky decomp and eigen decomp
+-rank of covariance matrix--number of nonzero eigen values
+-claim: cholesky is a nice way to generate MVN
+-eigen decom is nice way to think about the components, but often don't have enough info to estiamte the smaller eigen values
+-instead, zero out the lower order eigen values and use the approximation
+-to get data from target covarince, multiply iid normal(0,1) by the Cholesky
+-how to generate predictive intervals for missing data
+-give NA and then let random effects thing fix it
+[ ] interpolate biomass index over whole time period
+
+
+Week 5: Gaussian Process (Gaussian Random Field--GP over multiple dimensions, GP is 1D)
+-mean function, variance function
+-makes interpolation easy because they are continuous
+-function is how we represent infinite functional thing
+-reparameterization, some faster than others
+-precision matrices tend to be spare (Markov models have sparse precision matrices)
+-Don't actually need the covariance matrix to eval likelihood anyway, just the precision matrix
+
+Week 6: 2D spatial models
+-Daniel Simpson--paper called "why we should forget about correlation functions"
+-TL;DR we approximate a bunch of stuff with our models, that the next low hanging fruit is not coming up with a better correlation function, but rather fixing something else in the model
+-SPDE method: dimension reduction via mesh, use finite dimension analysis to solve a stochastic partial differential equation, appx matern correlation function with the result of SPDE and then construct correlation matrix of GMRF with a few sparse matrices
+-Kronecker product intro, which is a convenient way to multiply/combine precision matrices that preserves sparsity.
+-Kprod is an outer operator (the result is bigger than the inputs, vs inner product)
+-10% sparse * 10% sparse = 1% sparse
+-[didn't really talk about kriging though?]
+
+Week 7--Spatio-temporal models
+-more kprod with space and time now
+-desirable features of index stdz model --> historically, fixed effect per year so we have uncorrelated effects by year
+-spatial vs spatio-temporal models (lots of ways with smoothers in different places)
+-Jim calls spatio-temporal process a spatial process that varies over time
+
+Week 8--Multivariate models
+-biology is correlated between species
+-intrinsic (mean field models? movement, dispersal) vs extrinsic (grinellian niche, e.g., temperature) drivers of diversity
+-optimal scale for spatial smoothers
+
+
+Week 9--Streams and movement
+
+
+Other Questions
+Laplace approximation is the same as method of moments?
+inla.nonconvex.hull --> make inner border/outer border, use shapefile to define the inner hull
+Complicated passing of grid from INLA to raster package depends on pixel size??
+
+
+
+
+
+Comments
+-make code notation more similar to slides (eg make parameters have the same name)
+-"or whatever" indicated you're introducing a concept that maybe is more than you want to get into, but we might be really interested in it, so slow down. 
+
+ask Jacek if objective vs subjective dangers are like unforced vs forced errors
+
+Note:
+-from online, other speakers are like too good, too much background noise
